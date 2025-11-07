@@ -1,0 +1,75 @@
+@url=http://localhost:3000
+
+### Login para obtener token
+# @name login
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "carlitos@email.com",
+    "password": "contraseña123"
+}
+
+### Guardar token
+@token = {{login.response.body.token}}
+
+### PACIENTES
+
+### Listar a todos los pacientes
+GET {{url}}/pacientes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### Obtener un paciente en específico
+GET {{url}}/pacientes/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### Crear un nuevo paciente
+POST {{url}}/pacientes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Rodriguez",
+  "dni": "12345678",
+  "fecha_nacimiento": "2000-04-20",
+  "obra_social": "OSDE"
+}
+
+
+### Crear otro paciente
+POST {{url}}/pacientes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Norma",
+  "apellido": "Gonzalez",
+  "dni": "10865201",
+  "fecha_nacimiento": "2000-06-08",
+  "obra_social": "OSDE Plan 510"
+}
+
+
+### Modificar paciente
+PUT {{url}}/pacientes/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Rodriguez",
+  "dni": "12345678",
+  "fecha_nacimiento": "2000-04-20",
+  "obra_social": "OSDE Plan 310"
+}
+
+
+### Eliminar paciente
+DELETE {{url}}/pacientes/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
