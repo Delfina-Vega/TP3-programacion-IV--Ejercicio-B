@@ -1,0 +1,24 @@
+@url=http://localhost:3000
+
+### Registrar un nuevo usuario
+POST {{url}}/auth/register
+Content-Type: application/json
+
+{
+    "nombre": "Carlos Lopez",
+    "email": "carlitos@email.com",
+    "password": "contraseña123"
+}
+
+### Login 
+# @name login
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "carlitos@email.com",
+    "password": "contraseña123"
+}
+
+### Guarda token para usar en otras peticiones
+@token = {{login.response.body.token}}
