@@ -73,3 +73,15 @@ Content-Type: application/json
 DELETE {{url}}/pacientes/2
 Authorization: Bearer {{token}}
 Content-Type: application/json
+
+### Filtrar por nombre
+GET {{url}}/pacientes?nombre=Pedro
+Authorization: Bearer {{token}}
+
+### Filtrar por apellido
+GET {{url}}/pacientes?apellido=Rodriguez
+Authorization: Bearer {{token}}
+
+### Filtrar por DNI
+GET {{url}}/pacientes?dni=1234
+Authorization: Bearer {{token}}

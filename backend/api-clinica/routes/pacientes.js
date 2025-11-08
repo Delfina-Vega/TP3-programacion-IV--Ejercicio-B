@@ -6,13 +6,41 @@ import { verificarAutenticacion } from "./auth.js";
 
 const router = express.Router();
 
-//Get para listar todos los pacientes 
+//Get para listar todos los pacientes con filtro
 
 router.get("/", verificarAutenticacion, async (req, res) => {
     try {
-        const [pacientes] = await db.execute(
-            "SELECT * FROM pacientes ORDER BY apellido, nombre"
-        );
+        const { nombre, apellido, dni } = req.query;
+        
+        let sql = "SELECT * FROM pacientes WHERE 1=1";
+        const params = [];
+
+        if (nombre) {
+            sql += " AND nombre LIKE ?";
+            params.push(`%${nombre}%`);
+        }
+
+        if (apellido) {
+            sql += " AND apellido LIKE ?";
+            params.push(`%${apellido}%`);
+        }
+
+        if (dni) {
+            sql += " AND dni LIKE ?";
+            params.push(`%${dni}%`);
+        }
+
+        sql += " ORDER BY apellido, nombre";
+
+        const [pacientes] = await db.execute(sql, params);
+
+        if (pacientes.length === 0) {
+            return res.json({
+                success: true,
+                message: "No se encontraron pacientes con esos datos",
+                pacientes: [],
+            });
+        } 
 
     res.json({
         success: true,
@@ -40,21 +68,19 @@ router.get(
             const id = Number(req.params.id);
 
             const [pacientes] = await db.execute (
-                "SELECT * FROM pacientes WHERE id=?",
-                [id]   
-            );
+            "SELECT * FROM pacientes WHERE id=?",
+            [id]   
+         );
 
-            if (pacientes.length === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Paciente no encontrado",
-                });
-            }
-
+         if (pacientes.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Paciente no encontrado",
+           });
+         }
         res.json({
             success: true,
             paciente: pacientes[0],
-
         });
 
      } catch (error) {
@@ -80,48 +106,49 @@ router.post(
     verificarValidaciones,
     async (req, res) => {
         try {
-            const { nombre, apellido, dni, fecha_nacimiento, obra_social } = req.body;
+          const { nombre, apellido, dni, fecha_nacimiento, obra_social } = req.body;
+     //Verifica si el DNI ya existe 
 
-            //Verifica si el DNI ya existe 
+          const [pacientesExistentes] = await db.execute(
+           "SELECT id FROM pacientes WHERE dni=?",
+            [dni]
+           );
 
-            const [pacientesExistentes] = await db.execute(
-                "SELECT id FROM pacientes WHERE dni=?",
-                [dni]
-            );
+        if (pacientesExistentes.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Ya existe un paciente con ese DNI",
 
-            if (pacientesExistentes.length > 0) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Ya existe un paciente con ese DNI",
+              });
+           }
 
-                });
-            }
+    //Insertar paciente
+        const [result] = await db.execute(
+        "INSERT INTO pacientes (nombre, apellido, dni, fecha_nacimiento, obra_social) VALUES (?,?,?,?,?)",
+        [nombre, apellido, dni, fecha_nacimiento, obra_social]
 
-            //Insertar paciente
-            const [result] = await db.execute(
-                "INSERT INTO pacientes (nombre, apellido, dni, fecha_nacimiento, obra_social) VALUES (?,?,?,?,?)",
-                [nombre, apellido, dni, fecha_nacimiento, obra_social]
-
-            );
-            res.status(201).json({
-                success: true,
-                message: "Paciente creado exitosamente",
-                data: {
-                    id: result.insertId,
-                    nombre,
-                    apellido,
-                    dni,
-                    fecha_nacimiento,
-                    obra_social,
-                },
-            });
+       );
+       res.status(201).json({
+       success: true,
+       message: "Paciente creado exitosamente",
+       data: {
+        id: result.insertId,
+        nombre,
+        apellido,
+        dni,
+        fecha_nacimiento,
+        obra_social,
+        },
+        
+    });
 
         }catch (error) {
             console.error(error);
             res.status(500).json({
-                success: false,
-                message: "Error al crear paciente",
-            });
+            success: false,
+            message: "Error al crear paciente",
+    
+        });
         }
     }
 );
@@ -149,36 +176,36 @@ router.put(
                 [id]
             );
 
-            if (pacienteExistente.length === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Paciente no encontrado",
+        if (pacienteExistente.length === 0) {
+         return res.status(404).json({
+                success: false,
+                message: "Paciente no encontrado",
+             });
+          }
+
+    //Verifica si el dni ya esta en uso por otro paciente
+        const [dniDuplicado] = await db.execute(
+          "SELECT id FROM pacientes WHERE dni=? AND id!=?",
+           [dni, id]
+        );
+
+        if( dniDuplicado.length > 0) {
+          return res.status(400).json({
+                 success: false,
+                 message: "Ya existe otro paciente con ese DNI",
+
                 });
             }
 
-            //Verifica si el dni ya esta en uso por otro paciente
-            const [dniDuplicado] = await db.execute(
-                "SELECT id FROM pacientes WHERE dni=? AND id!=?",
-                [dni, id]
-            );
-
-            if( dniDuplicado.length > 0) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Ya existe otro paciente con ese DNI",
-
-                });
-            }
-
-            //Actualizar paciente
-            await db.execute(
-                "UPDATE pacientes SET nombre=?, apellido=?, dni=?, fecha_nacimiento=?, obra_social=? WHERE id=?",
-                [nombre, apellido, dni, fecha_nacimiento, obra_social, id]
-            );
+    //Actualizar paciente
+         await db.execute(
+          "UPDATE pacientes SET nombre=?, apellido=?, dni=?, fecha_nacimiento=?, obra_social=? WHERE id=?",
+           [nombre, apellido, dni, fecha_nacimiento, obra_social, id]
+         );
             
-            res.json({
-                success: true,
-                message: "Paciente modificado exitosamente",
+        res.json({
+                 success: true,
+                 message: "Paciente modificado exitosamente",
                 data: {
                     id,
                     nombre,
@@ -209,35 +236,35 @@ router.delete(
         try {
             const id = Number(req.params.id);
 
-            //Verificar si el paciente existe
+    //Verificar si el paciente existe
             const [paciente] = await db.execute(
                 "SELECT id FROM pacientes WHERE id=?",
                 [id]
             );
 
-            if (paciente.length === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Paciente no encontrado",
-                });
-            }
+       if (paciente.length === 0) {
+        return res.status(404).json({
+               success: false,
+               message: "Paciente no encontrado",
+              });
+           }
 
-              //Eliminar paciente 
-                await db.execute("DELETE FROM pacientes WHERE id=?", [id]);
-                  res.json({
-                  success: true,
-                  message: "Paciente eliminado exitosamente",
-                  data: { id },
-                   });
-                   } catch (error) {
-                     console.error(error);
-                     res.status(500).json({
-                      success: false,
-                      message: "Error al eliminar paciente",
+       //Eliminar paciente 
+             await db.execute("DELETE FROM pacientes WHERE id=?", [id]);
+               res.json({
+               success: true,
+               message: "Paciente eliminado exitosamente",
+               data: { id },
+               });
+                } catch (error) {
+                  console.error(error);
+                  res.status(500).json({
+                   success: false,
+                   message: "Error al eliminar paciente",
 
                         });
                      }
                 }
             );
 
-            export default router;
+     export default router;
