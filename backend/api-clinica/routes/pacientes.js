@@ -1,6 +1,6 @@
 import express from "express";
 import { db } from "../db.js";
-import { validarId, verificarValidaciones } from "./validaciones.js";
+import { validarId, verificarValidaciones } from "../validaciones.js";
 import { body } from "express-validator";
 import { verificarAutenticacion } from "./auth.js";
 
@@ -160,8 +160,8 @@ router.put(
     validarId,
     body("nombre").notEmpty().isLength({ max: 45 }).trim(),
     body("apellido").notEmpty().isLength({ max: 45 }).trim(),
-    body("dni").notEmpty().isLength({ min: 7, max: 20 }).trim()
-    .withMessage("El DNI debe contener solo numeros"),
+    body("dni").notEmpty().isLength({ min: 7, max: 20 }).isNumeric()
+    .withMessage("El DNI debe contener solo números").trim(),
     body("fecha_nacimiento").notEmpty().isDate(),
     body("obra_social").optional().isLength({ max: 100 }).trim(),
     verificarValidaciones,

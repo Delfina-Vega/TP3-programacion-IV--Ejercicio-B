@@ -1,0 +1,82 @@
+@url=http://localhost:3000
+
+### Login para obtener token
+# @name login
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "carlitos@email.com",
+    "password": "contraseña123"
+}
+
+### Guardar token
+@token = {{login.response.body.token}}
+
+### Medicos
+
+### Listar todos los medicos
+GET {{url}}/medicos
+Authorization: Bearer {{token}}
+
+### Obtener un medico especifico
+GET {{url}}/medicos/1
+Authorization: Bearer {{token}}
+
+### Crear nuevo médico
+POST {{url}}/medicos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Ana",
+  "apellido": "Peralta",
+  "especialidad": "Cardiología",
+  "matricula": "MP-12345"
+}
+
+### Crear otro médico
+POST {{url}}/medicos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Maria",
+  "apellido": "Fuentes",
+  "especialidad": "Pediatria",
+  "matricula": "MP-58601"
+}
+
+### Modificar médico
+PUT {{url}}/medicos/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Ana Maria",
+  "apellido": "Peralta",
+  "especialidad": "Cardiologia",
+  "matricula": "MP-12345"
+}
+
+### Eliminar médico
+DELETE {{url}}/medicos/3
+Authorization: Bearer {{token}}
+
+### Filtros 
+
+### Filtrar por nombre
+GET {{url}}/medicos?nombre=Maria
+Authorization: Bearer {{token}}
+
+### Filtrar por apellido
+GET {{url}}/medicos?apellido=Peralta
+Authorization: Bearer {{token}}
+
+### Filtrar por especialidad
+GET {{url}}/medicos?especialidad=Pediatria
+Authorization: Bearer {{token}}
+
+### Filtrar por nombre Y especialidad
+GET {{url}}/medicos?nombre=Ana&especialidad=Cardiologia
+Authorization: Bearer {{token}}

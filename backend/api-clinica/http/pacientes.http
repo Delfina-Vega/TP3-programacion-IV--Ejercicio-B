@@ -18,7 +18,6 @@ Content-Type: application/json
 ### Listar a todos los pacientes
 GET {{url}}/pacientes
 Authorization: Bearer {{token}}
-Content-Type: application/json
 
 
 ### Obtener un paciente en específico
@@ -72,7 +71,6 @@ Content-Type: application/json
 ### Eliminar paciente
 DELETE {{url}}/pacientes/2
 Authorization: Bearer {{token}}
-Content-Type: application/json
 
 ### Filtrar por nombre
 GET {{url}}/pacientes?nombre=Pedro
