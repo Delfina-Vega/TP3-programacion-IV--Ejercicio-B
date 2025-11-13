@@ -1,0 +1,112 @@
+@url=http://localhost:3000
+
+### Login para obtener token
+# @name login
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "carlitos@email.com",
+    "password": "contraseña123"
+}
+
+### Guardar token
+@token = {{login.response.body.token}}
+
+### TURNOS
+
+### Listar todos los turnos
+GET {{url}}/turnos
+Authorization: Bearer {{token}}
+
+### Obtener un turno específico
+GET {{url}}/turnos/1
+Authorization: Bearer {{token}}
+
+### Crear nuevo turno
+POST {{url}}/turnos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "paciente_id": 1,
+  "medico_id": 1,
+  "fecha": "2025-11-12",
+  "hora": "18:00",
+  "observaciones": "Control"
+}
+
+### Crear otro turno
+POST {{url}}/turnos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "paciente_id": 5,
+  "medico_id": 2,
+  "fecha": "2025-11-24",
+  "hora": "18:30",
+  "observaciones": "Primera consulta"
+}
+
+### Modificar turno completo
+PUT {{url}}/turnos/3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "paciente_id": 5,
+  "medico_id": 2,
+  "fecha": "2025-11-15",
+  "hora": "18:30",
+  "estado": "pendiente",
+  "observaciones": "Control de rutina - reprogramado"
+}
+
+### Cambiar solo el estado del turno
+PATCH {{url}}/turnos/2/estado
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "estado": "atendido"
+}
+
+### Agregar/modificar observaciones
+PATCH {{url}}/turnos/3/observaciones
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "observaciones": "Paciente presentó mejoría. Continuar con tratamiento."
+}
+
+### Eliminar turno
+DELETE {{url}}/turnos/3
+Authorization: Bearer {{token}}
+
+### FILTROS
+
+### Filtrar por paciente
+GET {{url}}/turnos?paciente_id=1
+Authorization: Bearer {{token}}
+
+### Filtrar por médico
+GET {{url}}/turnos?medico_id=1
+Authorization: Bearer {{token}}
+
+### Filtrar por fecha
+GET {{url}}/turnos?fecha=2025-11-12
+Authorization: Bearer {{token}}
+
+### Filtrar por estado
+GET {{url}}/turnos?estado=pendiente
+Authorization: Bearer {{token}}
+
+### Filtrar por médico Y fecha
+GET {{url}}/turnos?medico_id=1&fecha=2025-11-12
+Authorization: Bearer {{token}}
+
+### Filtrar por paciente Y estado
+GET {{url}}/turnos?paciente_id=3&estado=atendido
+Authorization: Bearer {{token}}
