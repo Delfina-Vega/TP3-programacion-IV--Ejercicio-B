@@ -8,15 +8,21 @@ import { Layout } from "./Layout.jsx";
 import { Home } from "./Home.jsx";
 import { Login } from "./Login.jsx";
 import { Registrar } from "./Registrar.jsx";
+
 import { Pacientes } from "./Pacientes/Pacientes.jsx";
 import { CrearPaciente } from "./Pacientes/CrearPaciente.jsx";
 import { ModificarPaciente } from "./Pacientes/ModificarPaciente.jsx";
 import { DetallesPaciente } from "./Pacientes/DetallesPaciente.jsx";
+
 import { Medicos } from "./Medicos/Medicos.jsx";
 import { CrearMedico } from "./Medicos/CrearMedico.jsx";
 import { ModificarMedico } from "./Medicos/ModificarMedico.jsx";
 import { DetallesMedico } from "./Medicos/DetallesMedico.jsx";
 
+import { Turnos } from "./Turnos/Turnos.jsx";
+import { CrearTurno } from "./Turnos/CrearTurno.jsx";
+import { ModificarTurno } from "./Turnos/ModificarTurno.jsx";
+import { DetallesTurno } from "./Turnos/DetallesTurno.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
@@ -99,7 +105,31 @@ createRoot(document.getElementById("root")).render(
               path="turnos"
               element={
                 <AuthPage>
-                  <div>Turnos...</div>
+                  <Turnos />
+                </AuthPage>
+              }
+            />
+            <Route
+              path="turnos/crear"
+              element={
+                <AuthPage>
+                  <CrearTurno />
+                </AuthPage>
+              }
+            />
+            <Route
+              path="turnos/:id"
+              element={
+                <AuthPage>
+                  <DetallesTurno />
+                </AuthPage>
+              }
+            />
+            <Route
+              path="turnos/:id/modificar"
+              element={
+                <AuthPage>
+                  <ModificarTurno />
                 </AuthPage>
               }
             />
