@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "./Auth";
 import { useNavigate, Link } from "react-router-dom";
 
-export const Ingresar = () => {
+export const Login = () => {
   const { login, error } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
