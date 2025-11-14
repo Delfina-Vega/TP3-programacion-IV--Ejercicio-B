@@ -1,0 +1,47 @@
+@import "@picocss/pico";
+
+/* Estilos personalizados */
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+/* Estilos para formularios */
+form fieldset {
+  margin-bottom: 1rem;
+}
+
+/* Estilos para tablas */
+table {
+  width: 100%;
+}
+
+/* Botones en grupo */
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Filtros */
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  margin-bottom: 0;
+}
+
+/* Mensajes de error */
+small[role="alert"] {
+  color: var(--del-color);
+}
