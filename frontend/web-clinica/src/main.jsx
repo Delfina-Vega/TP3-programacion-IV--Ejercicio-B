@@ -8,10 +8,14 @@ import { Layout } from "./Layout.jsx";
 import { Home } from "./Home.jsx";
 import { Login } from "./Login.jsx";
 import { Registrar } from "./Registrar.jsx";
-import { Pacientes } from "./Pacientes.jsx";
-import { CrearPaciente } from "./CrearPaciente.jsx";
-import { ModificarPaciente } from "./ModificarPaciente.jsx";
-import { DetallesPaciente } from "./DetallesPaciente.jsx";
+import { Pacientes } from "./Pacientes/Pacientes.jsx";
+import { CrearPaciente } from "./Pacientes/CrearPaciente.jsx";
+import { ModificarPaciente } from "./Pacientes/ModificarPaciente.jsx";
+import { DetallesPaciente } from "./Pacientes/DetallesPaciente.jsx";
+import { Medicos } from "./Medicos/Medicos.jsx";
+import { CrearMedico } from "./Medicos/CrearMedico.jsx";
+import { ModificarMedico } from "./Medicos/ModificarMedico.jsx";
+import { DetallesMedico } from "./Medicos/DetallesMedico.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -57,15 +61,40 @@ createRoot(document.getElementById("root")).render(
               }
             />
 
-            {/* Temporales */}
+            {/*Rutas de Medicos*/}
             <Route
               path="medicos"
               element={
                 <AuthPage>
-                  <div>Médicos...</div>
+                  <Medicos />
                 </AuthPage>
               }
             />
+            <Route
+              path="medicos/crear"
+              element={
+                <AuthPage>
+                  <CrearMedico />
+                </AuthPage>
+              }
+            />
+            <Route
+              path="medicos/:id"
+              element={
+                <AuthPage>
+                  <DetallesMedico />
+                </AuthPage>
+              }
+            />
+            <Route
+              path="medicos/:id/modificar"
+              element={
+                <AuthPage>
+                  <ModificarMedico />
+                </AuthPage>
+              }
+            />
+            
             <Route
               path="turnos"
               element={
