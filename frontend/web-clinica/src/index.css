@@ -1,47 +1,220 @@
 @import "@picocss/pico";
 
-/* Estilos personalizados */
+/* PALETA DE COLORES*/
 :root {
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
+  --primary: #0ea5e9;
+  --secondary: #10b981;
+  --contrast: #8b5cf6;
+
+  --primary-hover: #0284c7;
+  --secondary-hover: #059669;
+
+  --border-color: #e2e8f0;
+  --text-muted: #64748b;
+
+  --bg-light: #f8fafc;
+  --bg-white: #ffffff;
 }
 
+/* GLOBALES*/
 body {
-  padding: 0;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  min-height: 100vh;
+}
+
+/* Reutilizables */
+.card {
+  background: var(--bg-white);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.shadow-sm {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+article, .filters, table {
+  animation: fadeIn 0.3s ease;
+}
+
+/* PÁGINA DE BIENVENIDA*/
+.welcome-container {
+  max-width: 800px;
+  margin: 4rem auto;
+  text-align: center;
+}
+
+.welcome-header {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: 1rem 1rem 0 0;
+  box-shadow: 0 10px 30px rgba(14,165,233,0.2);
+}
+
+.welcome-header h1 {
   margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
 }
 
-/* Estilos para formularios */
-form fieldset {
-  margin-bottom: 1rem;
+.welcome-body {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-/* Estilos para tablas */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(14,165,233,0.15);
+  border-color: var(--primary);
+}
+
+.feature-card .icon {
+  font-size: 3rem;
+}
+
+/* Colores por sección */
+.feature-card.pacientes:hover {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.feature-card.medicos:hover {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.feature-card.turnos:hover {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+}
+
+/*LOGIN / REGISTER */
+.auth-container {
+  max-width: 500px;
+  margin: 3rem auto;
+}
+
+.auth-card {
+  padding: 2.5rem;
+}
+
+/* NAVEGACIÓN */
+nav {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+nav a {
+  color: #475569;
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: var(--primary);
+}
+
+/*  TABLAS */
 table {
-  width: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
-/* Botones en grupo */
+table thead {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  color: white;
+}
+
+table tbody tr:hover {
+  background: var(--bg-light);
+}
+
+/* FILTROS*/
+.filters {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/*BOTONES */
 .button-group {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-/* Filtros */
-.filters {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
+button, [role="button"] {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
-.filters input,
-.filters select {
-  margin-bottom: 0;
+button:hover, [role="button"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Mensajes de error */
-small[role="alert"] {
-  color: var(--del-color);
+/*BADGES*/
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.badge-pendiente { background: #fef3c7; color: #92400e; }
+.badge-atendido  { background: #d1fae5; color: #065f46; }
+.badge-cancelado { background: #fee2e2; color: #991b1b; }
+
+/* MENSAJES*/
+.success-message {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  padding: 1rem;
+  border-left: 4px solid var(--secondary);
+}
+
+.error-message {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  padding: 1rem;
+  border-left: 4px solid #ef4444;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .welcome-header h1 { font-size: 1.8rem; }
+  .card-grid { grid-template-columns: 1fr; }
+  .button-group { flex-direction: column; }
 }

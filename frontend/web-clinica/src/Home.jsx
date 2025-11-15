@@ -12,7 +12,10 @@ export const Home = () => {
 
       {isAuthenticated ? (
         <div>
-          <p>Bienvenido/a, <strong>{usuario?.nombre}</strong></p>
+         <h2>¡Bienvenido/a, {usuario?.nombre}! </h2>
+            <p style={{ color: "#64748b", marginBottom: "2rem" }}>
+              Seleccione una opción para comenzar a operar
+            </p>
           <div className="grid">
             <Link to="/pacientes" role="button">
               Pacientes
